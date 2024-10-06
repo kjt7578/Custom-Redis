@@ -44,7 +44,7 @@ int main() {
 
 	int connection_backlog = 5;
 	if (listen(server_fd, connection_backlog) != 0) {
-	p	rintf("Listen failed: %s \n", strerror(errno));
+		printf("Listen failed: %s \n", strerror(errno));
 		return 1;
 	}
 	
