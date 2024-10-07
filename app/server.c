@@ -53,11 +53,40 @@ int main() {
     close(server_fd);
     return 1;
   }
-  
-  char *response = "+PONG\r\n";
-  send(client_fd, response, strlen(response), 0);	// Send the response to the connected client
 
   printf("Client connected\n");
+
+  char buffer[1024];
+  
+  // Loop to handle multiple commands from the same connection
+  while (1) {
+    // Receive input from the client
+    ssize_t bytes_received = recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+    
+    // Error handling for no input
+    if (bytes_received <= 0) {
+      if (bytes_received == 0) {
+        printf("Client disconnected.\n");
+      } else {
+        printf("Recv failed: %s\n", strerror(errno));
+      }
+      break;
+    }
+    
+    // Null-terminate the received data
+    buffer[bytes_received] = '\0';
+
+    // Return PONG if input is PING
+    if (strncmp(buffer, "*1\r\n$4\r\nPING\r\n", bytes_received) == 0) {
+      char *response = "+PONG\r\n";
+      send(client_fd, response, strlen(response), 0);  // Send the response to the connected client
+    } else {
+      // Handle unknown commands
+      char *unknown_response = "-ERROR Unknown command\r\n";
+      send(client_fd, unknown_response, strlen(unknown_response), 0);
+    }
+  }
+
 
   close(client_fd);	// Close the client connection
   close(server_fd);	// Close the server socket
