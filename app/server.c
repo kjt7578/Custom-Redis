@@ -14,7 +14,7 @@ int main() {
 
   setbuf(stdout, NULL);
 
-  server_fd = socket(AF_INET, SOCK_STREAM, 0);
+  server_fd = socket(AF_INET, SOCK_STREAM, 0);	// Create a TCP socket
   if (server_fd == -1) {
     printf("Socket creation failed: %s...\n", strerror(errno));
     return 1;
@@ -47,8 +47,7 @@ int main() {
   printf("Waiting for a client to connect...\n");
   client_addr_len = sizeof(client_addr);
 
-  int client_fd =
-      accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);
+  int client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);	// Accept an incoming client connection
   if (client_fd < 0) {
     printf("Accept failed: %s \n", strerror(errno));
     close(server_fd);
@@ -56,9 +55,11 @@ int main() {
   }
   
   char *response = "+PONG\r\n";
-  send(client_fd, response, strlen(response), 0);
+  send(client_fd, response, strlen(response), 0);	// Send the response to the connected client
+
   printf("Client connected\n");
-  close(client_fd);
-  close(server_fd);
+
+  close(client_fd);	// Close the client connection
+  close(server_fd);	// Close the server socket
   return 0;
 }

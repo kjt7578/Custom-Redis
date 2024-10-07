@@ -1,0 +1,12 @@
+git commit -am " "
+git push origin master
+
+
+//Check if any server is running on port (6379)
+sudo lsof -i :6379
+
+//Kill PID got from "lsof -i"
+sudo kill -9 <PID>
+
+//Check if Redis server is running
+ps aux | grep redis
