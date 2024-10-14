@@ -56,6 +56,10 @@ int main() {
 
   printf("Client connected\n");
 
+
+
+
+
   char buffer[1024];
   
   // Loop to handle multiple commands from the same connection
@@ -80,12 +84,23 @@ int main() {
     if (strncmp(buffer, "*1\r\n$4\r\nPING\r\n", bytes_received) == 0) {
       char *response = "+PONG\r\n";
       send(client_fd, response, strlen(response), 0);  // Send the response to the connected client
-    } else {
+    } 
+    else if (strncmp(buffer, "*1\r\n$8\r\nPING\nPING\r\n", bytes_received) == 0) {
+      char *response = "+PONG\r\n";
+      send(client_fd, response, strlen(response), 0);  // Send the response to the connected client
+    } 
+    else {
       // Handle unknown commands
       char *unknown_response = "-ERROR Unknown command\r\n";
       send(client_fd, unknown_response, strlen(unknown_response), 0);
     }
   }
+
+
+
+
+
+
 
 
   close(client_fd);	// Close the client connection
