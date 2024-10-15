@@ -47,17 +47,25 @@ int main() {
   printf("Waiting for a client to connect...\n");
   client_addr_len = sizeof(client_addr);
 
-  int client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);	// Accept an incoming client connection
-  if (client_fd < 0) {
-    printf("Accept failed: %s \n", strerror(errno));
-    close(server_fd);
-    return 1;
+
+  int client_fd;
+  while(1){
+    client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);	// Accept an incoming client connection
+      if (client_fd < 0) {
+      printf("Accept failed: %s \n", strerror(errno));
+      close(server_fd);
+      return 1;
+    }
+    int pid = fork();
+    if(pid == 0){
+      break;
+    }  
+    printf("Client connected\n");
   }
 
-  printf("Client connected\n");
 
 
-
+  
 
 
   char buffer[1024];
