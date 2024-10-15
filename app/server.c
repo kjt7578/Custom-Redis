@@ -87,7 +87,8 @@ int main() {
     
     // Null-terminate the received data
     buffer[bytes_received] = '\0';
-
+    
+    printf("%ld\n",bytes_received);
     // Return PONG if input is PING
     if (strncmp(buffer, "*1\r\n$4\r\nPING\r\n", bytes_received) == 0) {
       char *response = "+PONG\r\n";
