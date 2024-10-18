@@ -56,11 +56,14 @@ int main() {
       close(server_fd);
       return 1;
     }
+
     int pid = fork();
-    if(pid == 0){
+    if (pid == 0) {
+      close(server_fd);
       break;
-    }  
+    }
     printf("Client connected\n");
+    close(client_fd); 
   }
 
 
@@ -69,7 +72,7 @@ int main() {
 
 
   char buffer[1024];
-  
+
   // Loop to handle multiple commands from the same connection
   while (1) {
     // Receive input from the client
@@ -96,6 +99,10 @@ int main() {
     } 
     else if (strncmp(buffer, "*1\r\n$8\r\nPING\nPING\r\n", bytes_received) == 0) {
       char *response = "+PONG\r\n";
+      send(client_fd, response, strlen(response), 0);  // Send the response to the connected client
+    } 
+else if (strncmp(buffer, "*1\r\n$4\r\nECHO\r\n", 14) == 0) {
+      char *response = "+ECHO\r\n";
       send(client_fd, response, strlen(response), 0);  // Send the response to the connected client
     } 
     else {

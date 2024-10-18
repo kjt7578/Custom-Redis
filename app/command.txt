@@ -1,6 +1,8 @@
 git commit -am " "
 git push origin master
 
+codecrafters test
+
 
 //Check if any server is running on port (6379)
 sudo lsof -i :6379
@@ -10,3 +12,9 @@ sudo kill -9 <PID>
 
 //Check if Redis server is running
 ps aux | grep redis
+
+//kill bulit in redis
+sudo systemctl stop redis
+
+//Connect to my Redis server
+redis-cli
